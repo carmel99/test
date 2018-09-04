@@ -15,36 +15,35 @@ Learn how to build site-to-site IPsec VPNs between
 Strongswan.
 
 
-- [Using Cloud VPN with Strongswan](#using-cloud-vpn-with-strongswan)
-    - [Introduction](#introduction)
-    - [Terminology](#terminology)
-    - [Topology](#topology)
-    - [Product environment](#product-environment)
-    - [Before you begin](#before-you-begin)
-        - [GCP account and project](#gcp-account-and-project)
-        - [Permissions](#permissions)
-    - [Configure the GCP side](#configure-the-gcp-side)
-        - [Initial tasks](#initial-tasks)
-            - [Select a GCP project name](#select-a-gcp-project-name)
-            - [Create a custom VPC network and subnet](#create-a-custom-vpc-network-and-subnet)
-            - [Create the GCP external IP address](#create-the-gcp-external-ip-address)
-        - [Configuring route-based IPsec VPN using static routing](#configuring-route-based-ipsec-vpn-using-static-routing)
-            - [Configure the VPN gateway](#configure-the-vpn-gateway)
-            - [Configure the VPN tunnel](#configure-the-vpn-tunnel)
-            - [Configure firewall](#configure-firewall)
-    - [Configure the Strongswan side](#configure-the-strongswan-side)
-        - [GCP-compatible settings for IPSec and IKE](#gcp-compatible-settings-for-ipsec-and-ike)
-        - [Creating the VPN configuration](#creating-the-vpn-configuration)
-        - [Testing the configuration](#testing-the-configuration)
-    - [Troubleshooting IPsec on Strongswan side](#troubleshooting-ipsec-on-strongswan-side)
-    - [Reference documentation](#reference-documentation)
-        - [GCP documentation](#gcp-documentation)
-        - [Strongswan documentation](#strongswan-documentation)
-    - [Appendix: Using gcloud commands](#appendix-using-gcloud-commands)
-        - [Running gcloud commands](#running-gcloud-commands)
-        - [Configuration parameters and values](#configuration-parameters-and-values)
-        - [Setting environment variables for gcloud command parameters](#setting-environment-variables-for-gcloud-command-parameters)
-        - [Configuring IPsec VPN using static routing](#configuring-ipsec-vpn-using-static-routing)
+- [Introduction](#introduction)
+- [Terminology](#Terminology)
+- [Topology](#topology)
+- [Product environment](#product-environment)
+- [Before you begin](#before-you-begin)
+    - [GCP account and project](#gcp-account-and-project)
+    - [Permissions](#permissions)
+- [Configure the GCP side](#configure-the-gcp-side)
+    - [Initial tasks](#initial-tasks)
+        - [Select a GCP project name](#select-a-gcp-project-name)
+        - [Create a custom VPC network and subnet](#create-a-custom-vpc-network-and-subnet)
+        - [Create the GCP external IP address](#create-the-gcp-external-ip-address)
+    - [Configuring route-based IPsec VPN using static routing](#configuring-route-based-ipsec-vpn-using-static-routing)
+        - [Configure the VPN gateway](#configure-the-VPN-gateway)
+        - [Configure the VPN tunnel](#Configure-the-VPN-tunnel)
+        - [Configure firewall](#Configure-firewall)
+- [Configure the Strongswan side](#configure-the-Strongswan-side)
+    - [GCP-compatible settings for IPSec and IKE](#gcp-compatible-settings-for-ipsec-and-ike)
+    - [Creating the VPN configuration](#creating-the-vpn-configuration)
+    - [Testing the configuration](#testing-the-configuration)
+- [Troubleshooting IPsec on Strongswan side](#troubleshooting-ipsec-on-Strongswan-side)
+- [Reference documentation](#reference-documentation)
+    - [GCP documentation](#gcp-documentation)
+    - [Strongswan documentation](#Strongswan-documentation)
+- [Appendix: Using gcloud commands](#appendix-using-gcloud-commands)
+    - [Running gcloud commands](#running-gcloud-commands)
+    - [Configuration parameters and values](#configuration-parameters-and-values)
+    - [Setting environment variables for gcloud command parameters](#setting-environment-variables-for-gcloud-command-parameters)
+    - [Configuring IPsec VPN using static routing](#Configuring-IPsec-VPN-using-static-routing)
 
 
 ![screen shot 2018-08-20 at 3 58 44 pm](https://user-images.githubusercontent.com/42278789/44371087-fc9a8b80-a491-11e8-86c7-22499e7b5913.png)
@@ -208,8 +207,9 @@ configure the VPN gateway later.
     Normally, this is the region that contains the instances you want to reach.
 -  **IP address**—Select the 
     [static external IP address](#create-the-gcp-external-ip-address)
-    (for example, `vpn-test-static-ip`(146.148.83.11)) that you created for this gateway
+    (for example, `vpn-test-static-ip`) that you created for this gateway
     in the previous section.
+    ![vpn_address_strong_swan-1](https://user-images.githubusercontent.com/42278789/44417291-f0faa380-a529-11e8-9c39-ec5f160bd8d9.png)
 
 
 
@@ -217,7 +217,7 @@ configure the VPN gateway later.
 Populate the fields for at least one tunnel:
 
 -  **Name**—The name of the VPN tunnel, such as `vpn-test-tunnel1`.
--  **Remote peer IP address**—The public external IP address (209.119.81.229) of the
+-  **Remote peer IP address**—The public external IP address of the
     on-premises VPN gateway.
 -  **IKE version**—`IKEv2` or `IKEv1`. IKEv2 is preferred, but IKEv1 is
     supported if it is the only supported IKE version that the on-premises
@@ -231,14 +231,15 @@ Populate the fields for at least one tunnel:
 1. In the configuration for a tunnel, under **Routing options**,
     choose **route based**.
 1. For **Remote network IP ranges**, set the IP address range or ranges
-    of the on-premises network (192.168.2.0/24), which is the network on the other side of the
-    tunnel from the Cloud VPN gateway you are currently configuring. 
+    of the on-premises network, which is the network on the other side of the
+    tunnel from the Cloud VPN gateway you are currently configuring.
 
 1. Click **Create** to create the gateway and initiate all tunnels. This step
 automatically creates a network-wide route and the necessary forwarding
 rules for the tunnel. The tunnels will not pass traffic until you've
 configured the firewall rules.
 
+![screen shot 2018-08-21 at 10 36 16 am](https://user-images.githubusercontent.com/42278789/44418752-1689ac00-a52e-11e8-9cf0-d3f9350f27f2.png)
 
 
 #### Configure firewall
@@ -415,37 +416,10 @@ On the Strongswan side, use the following instructions to test the connection to
 machine that's on GCP
 
 1. Ping a VM machine on GCP.
-
-```
-[root@strongswancentos strongswan]# ping -c3 10.240.0.2
-PING 10.240.0.2 (10.240.0.2) 56(84) bytes of data.
-64 bytes from 10.240.0.2: icmp_seq=1 ttl=64 time=52.9 ms
-64 bytes from 10.240.0.2: icmp_seq=2 ttl=64 time=51.7 ms
-64 bytes from 10.240.0.2: icmp_seq=3 ttl=64 time=51.7 ms
-
---- 10.240.0.2 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2003ms
-```
-
-2. To check on the status of the IKEv2 security associations use the strongswan command:
+1. To check on the status of the IKEv2 security associations use the swanctl --list-sas command:
 swanctl --list-sas
 
-```
-[root@strongswancentos strongswan]# swanctl --list-sas
-myconn: #1, ESTABLISHED, IKEv2, 3a450cb00426d3d7_i 0b4c06b387f34bf5_r*
-  local  '209.119.81.229' @ 209.119.81.229[500]
-  remote '146.148.83.11' @ 146.148.83.11[500]
-  AES_CBC-128/HMAC_SHA2_256_128/PRF_HMAC_SHA2_256/MODP_2048
-  established 563s ago, reauth in 34613s
-  myconn: #1, reqid1, INSTALLED, TUNNEL, ESP:AES_CBC-256/HMAC_SHA2_512_256
-    istalled 563s ago, rekeying in 9166s, expires in 10237s
-    in  cf9fb639,   1128 bytes,    17 packets,     4s ago
-    out 662d4fc2,   1176 bytes,    14 packets,     4s ago
-    local    192.168.2.0/24
-    remote   10.240.0.0/16
-[root@strongswancentos strongswan]#    
-```
-
+<img width="615" alt="strongswan-ping test" src="https://user-images.githubusercontent.com/42278789/44420787-ba298b00-a533-11e8-9c1e-6b5dee78db5d.png">
 
 
 
@@ -457,64 +431,20 @@ If you are experiencing issues with your VPN setup based on the instructions abo
 
 ```
 sudo strongswan status
-
-[root@strongswancentos strongswan]#strongswan status
-Security Associations (1 up , 0 connectioning):
-      myconn[1]: ESTABLISHED 36 minutes ago, 209.119.81.229[209.119.81.229]...146.148.83.11[146.148.
-83.11]
-      myconn[1]:  INSTALLED, TUNNEL, reqid 1, ESP SPIs: cf9fb639_i 662d4fc2_o
-      myconn[1]:   192.168.2.0/24 === 10.240.0.0/16
-[root@strongswancentos strongswan]#      
 ```
-
+<img width="803" alt="screen shot 2018-06-14 at 4 11 16 pm" src="https://user-images.githubusercontent.com/42278789/44421355-1a6cfc80-a535-11e8-9920-ae66f83b4423.png">
 
 If myconn isn't listed, start up the connection:
 $ sudo strongswan up myconn
 
-```
-[root@strongswancentos strongswan]#strongswan up myconn
-establishing CHILD_SA myconn{2}
-generating CREATE_CHILD_SA request 74 [ SA NO KE TSi TSr ]
-sending packet: from 209.119.81.229[500] to 146.148.83.11[500] (480 bytes)
-received packet: from 146.148.83.11[500] to 209.119.81.229[500] (480 bytes)
-parsed CREATE_CHILD_SA response 74 [  SA NO KE TSi TSr  ]
-CHILD_SA myconn{2} established with SPIs c4cfa6d7_i 137dce69_o and TS 192.168.2.0/24 === 10.240.0.0/
-16
-connection 'myconn' established successfully
-[root@strongswancentos strongswan]#
-```
-
-
+<img width="1527" alt="screen shot 2018-06-14 at 4 13 52 pm" src="https://user-images.githubusercontent.com/42278789/44421397-3e304280-a535-11e8-9400-3125641bdfa7.png">
 
 2.Determine whether the two VPN endpoints are able to communicate at all.
 
 
 Run tcpdump on the receiving end to determine that your VM instance can receive the packets:
 tcpdump -nn -n host [public-ip-of-GCP-VPN-gateway] -i any -v
-
-```
-[root@strongswancentos strongswan]#tcpdump -nn -n host 146.148.83.11 -i any -v
-tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
-16:36:28.009658 IP (tos 0X0, ttl 38, id 0, offset 0, flags [DF], proto ESP (50), length 172)
-    146.148.83.11 > 208.119.81.229: ESP(spi=0xc4cfa6d7,seq=0x46), length 152
-16:36:28.009786 IP (tos 0x0, ttl 64, id 56767, offset 0, flags [none], proto ESP (50), length 172)
-    209.119.81.229 > 146.148.83.11: ESP(spi=0x137dce69,seq=0x46), length 152
-16:36:29.010421 IP (tos 0x0, ttl 38, id 0, offset 0, flags [DF], proto ESP(50), length 172)
-    146.148.83.11 > 209.119.81.229: ESP(spi=0xc4cfa6d7,seq=0x47), length 152
-16:36:29.010497 IP (tos 0x0, ttl 64, id 57440, offset 0, flags [none], proto ESP (50), length 172)
-    209.119.81.229 > 146.148.83.11: ESP(spi=0x137dce69,seq=0x47), length 152
-16:36:30.011186 IP (tos 0x0, ttl 38, id 0, offset 0, flags [DF], proto ESP (50), length 172)
-    146.148.83.11 > 209.119.81.229: ESP(spi=0xc4cfa6d7, seq=0x48), length 152
-16:36:30.011260 IP (tos 0x0, ttl 64, id 55719, 0ffset 0, flags [none], proto ESP (50), length 172)
-    209.119.81.229 > 146.148.83.11: ESP(spi=0x137dce69, seq=0x48), length 152
-^C
-6 packets captured
-7 packets received by filter
-0 packets dropped by kernel
-[root@strongswancentos strongswan]#
-```
-
-
+<img width="1365" alt="screen shot 2018-06-14 at 4 37 04 pm" src="https://user-images.githubusercontent.com/42278789/44421564-c7e01000-a535-11e8-9136-ef0331769953.png">
 
 3. Turn on more verbose logging by adding the following lines to your /etc/strongswan/ipsec.conf file:
 
@@ -531,41 +461,7 @@ conn myconn
 
 Next, retry your connection. Although the connection should still fail, you can check the log for errors. The log file should be located at /var/log/messages on your linux.
 
-```
-[root@strongswancentos strongswan]#tail -20f /var/log/messages
-Jun 14 16:44:45 strongswancentos strongswan: 04[NET] sending packet: from 209.119.81.229[500] to 146
-.148.83.11[500]
-Jun 14 16:44:45 strongswancentos strongswan: 03[NET] received packet => 80 bytes @ 0x7f0bbd148410
-Jun 14 16:44:45 strongswancentos strongswan: 03[NET]    0: 3A 45 0C B0 04 26 D3 D7 0B 4C 06 B3 87 F3
- 4B F5  :E...&...L....K.
-Jun 14 16:44:45 strongswancentos strongswan: 03[NET]   16: 2E 20 25 28 00 00 00 80 00 00 00 50 00 00
- 00 34  . %(.......p...4
-Jun 14 16:44:45 strongswancentos strongswan: 03[NET]   32: 4D 08 B4 AF 0F 89 BC F8 69 B7 3C 09 C4 78
- 3A 22  M.......i.<..x:"
-Jun 14 16:44:45 strongswancentos strongswan: 03[NET]   48: F6 5F 0A C7 78 41 C8 02 6D 2B 36 2D D1 2F
- CD D7  ._..xA..m+6-./..
-Jun 14 16:44:45 strongswancentos strongswan: 03[NET]   64: CD 44 48 C1 02 6E B5 0B 2C 32 71 43 49 E5
- 6E 10  .DH..n..,2qCI.n.
-Jun 14 16:44:45 strongswancentos strongswan: 03[NET] received packet: from 146.148.83.11[500] to 209
-.119.81.229[500]
-Jun 14 16:44:45 strongswancentos strongswan: 03[NET] waiting for data on sockets
-Jun 14 16:44:45 strongswancentos strongswan: 07[MGR] checkout IKEv2 SA by message with SPIs 3a450cb0
-0426d3d7_i 0b4c06b387f34bf5_r
-Jun 14 16:44:45 strongswancentos strongswan: 07[MGR] IKE_SA myconn[1] successfully checked out
-Jun 14 16:44:45 strongswancentos strongswan: 07[NET] received packet: from 146.148.83.11[500] to 209
-.119.81.229[500] (80 bytes)
-Jun 14 16:44:45 strongswancentos strongswan: 07[ENC] parsed INFORMAIONAL response 128 [  ]
-Jun 14 16:44:45 strongswancentos strongswan: 07[IKE] activating new tasks
-Jun 14 16:44:45 strongswancentos strongswan: 07[IKE] nothing to initiate
-Jun 14 16:44:45 strongswancentos strongswan: 07[MGR] checkin IKE_SA myconn[1]
-Jun 14 16:44:45 strongswancentos strongswan: 07[MGR] checkin of IKE_SA successful
-Jun 14 16:44:45 strongswancentos charon: 12[MGR] checkin IKE_SA myconn[1]
-Jun 14 16:44:45 strongswancentos strongswan: 12[MGR] checkout IKEv2 SA with SPIs 3a450cb00426d3d7_i
-0b4c06b387f34bf5_r
-Jun 14 16:44:45 strongswancentos charon: 12[MGR] checkin of IKE_SA successful
-```
-
-
+<img width="1373" alt="screen shot 2018-06-14 at 4 45 42 pm" src="https://user-images.githubusercontent.com/42278789/44421629-fa8a0880-a535-11e8-91cf-5c5556d6b5b4.png">
 
 
 ## Reference documentation
