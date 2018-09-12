@@ -705,18 +705,6 @@ name><product-name></td>
 </tr>
 
 <tr>
-<td>BGP interface name</td>
-<td><code>[BGP_IF]<code></td>
-<td><code>if-1<code></td>
-</tr>
-
-<tr>
-<td>BGP session name (for dynamic routing)</td>
-<td><code>[BGP_SESSION_NAME]<code></td>
-<td><code>bgp-peer1<code></td>
-</tr>
-
-<tr>
 <td>The name for the first GCP VPN gateway.</td>
 <td><code>[VPN_GATEWAY_1]<code></td>
 <td><code>vpn-test-[VENDOR_NAME]-gw-1</code>, where <code>[VENDOR_ NAME]</code>
@@ -804,8 +792,6 @@ export STATIC_EXTERNAL_IP=[STATIC_EXTERNAL_IP]
 export VPN_RULE=[VPN_RULE]
 export IP_ON_PREM_SUBNET=[IP_ON_PREM_SUBNET]
 export CLOUD_ROUTER_NAME=[CLOUD_ROUTER_NAME]
-export BGP_IF=[BGP_IF]
-export BGP_SESSION_NAME=[BGP_SESSION_NAME]
 export VPN_TUNNEL_1=[VPN_TUNNEL_1]
 export CUST_GW_EXT_IP=[CUST_GW_EXT_IP]
 export ROUTE_NAME=[ROUTE_NAME]
